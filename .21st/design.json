@@ -1,0 +1,60 @@
+{
+  "product": "StruktHQ organization operating platform",
+  "scope": [
+    "Homepage",
+    "Elections"
+  ],
+  "references": {
+    "structure": "https://cal.com",
+    "visuals": "https://www.talentlms.com"
+  },
+  "tokens": {
+    "colors": {
+      "navy": "#062541",
+      "blue": "#365fb5",
+      "slate": "#435a70",
+      "ice": "#eff5fa",
+      "ink": "#142b3c",
+      "white": "#ffffff",
+      "royalBlue": "#285bcc",
+      "teal": "#087b78",
+      "amber": "#f2b544",
+      "blueSurface": "#edf3ff",
+      "tealSurface": "#e7f4f0",
+      "amberSurface": "#fff2d7",
+      "warmSurface": "#fff8ed"
+    },
+    "typography": {
+      "heading": "Fraunces (temporary approved preview); Recoleta final",
+      "body": "Manrope (temporary approved preview); Axiforma final"
+    },
+    "layout": {
+      "container": "1216px",
+      "gutters": "24px mobile / 48px desktop",
+      "sectionSpacing": "100\u2013120px desktop / 64px mobile",
+      "borders": "Fine continuous frame and section dividers"
+    }
+  },
+  "decisions": [
+    "Both pages are approved",
+    "Use supplied wordmark and cube logo",
+    "Use real supplied dashboard screenshots",
+    "Centered navy hero with layered dashboard imagery",
+    "Homepage retains concise seven-section content flow",
+    "Elections retains voter communication and audience sections from full source body",
+    "Separate Core Platform and Elections pricing entry points",
+    "Local preview only; no hosted publication requested",
+    "Approved refresh: real category photography with colored card bodies",
+    "Use supporting teal and amber while navy and blue remain dominant",
+    "Strengthen section contrast on both pages",
+    "Use actual registration, permissions and executive record crops for benefits",
+    "Targeted Elections polish: separate responsive workflow cards, Untitled UI featured-icon and card patterns adapted to existing static site, evenly inset participation frame, native-resolution screenshots for expanded views",
+    "Public elections use a four-step vertical ordered process; custom-deployment pricing has a structured callout; footer links open separate review drafts; the monitor preview shows the complete native upload rather than the participation-only crop.",
+    "Match both voting models with a reusable numbered journey; add a factual cookie notice, settings dialog, preference reset, Cookie Policy page and inquiry privacy link. Only the first-party privacy-choice cookie is stored, after an explicit choice; no analytics or advertising service is enabled.",
+    "Approved pricing polish: small teal people-icon tile beside a bolder voter range; preserve the annual-price hierarchy. Add a faint, smaller cube watermark cropped into the homepage hero top-right corner, with a reduced mobile treatment and decorative-only semantics.",
+    "User requested a slightly larger homepage watermark: increase desktop to 330px, tablet to 240px, and phone to 175px; retain the faint treatment and corner crop.",
+    "Product screenshots stand alone with no added colored frame, browser toolbar, border or viewing-label strip. Reuse one screenshot button with slight hover zoom, visible keyboard focus and reduced-motion support across modules, heroes, benefits, monitor and composer. Preserve surrounding editorial cards and sections; decorative marks and audience photography stay still. Expanded views retain native uploaded PNGs."
+  ],
+  "21st": "CLI available; search attempted but account is not signed in",
+  "contactEmail": "admin@strukthq.com"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "strukthq-marketing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "node build.mjs",
+    "preview": "node server.mjs --production"
+  },
+  "dependencies": {
+    "@react-stately/utils": "^3.12.1",
+    "@untitledui/icons": "^0.0.23",
+    "input-otp": "^1.5.0",
+    "react-aria-components": "^1.22.0",
+    "tailwind-merge": "^3.7.0"
+  }
+}
