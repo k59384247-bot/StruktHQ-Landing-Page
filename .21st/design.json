@@ -1,12 +1,13 @@
 {
-  "product": "StruktHQ organization operating platform",
+  "product": "StruktHQ digital operations platform",
   "scope": [
     "Homepage",
     "Elections"
   ],
   "references": {
     "structure": "https://cal.com",
-    "visuals": "https://www.talentlms.com"
+    "visuals": "https://www.talentlms.com",
+    "productDetails": "https://linear.app/features"
   },
   "tokens": {
     "colors": {
@@ -31,30 +32,28 @@
     "layout": {
       "container": "1216px",
       "gutters": "24px mobile / 48px desktop",
-      "sectionSpacing": "100\u2013120px desktop / 64px mobile",
+      "sectionSpacing": "100–120px desktop / 64px mobile",
       "borders": "Fine continuous frame and section dividers"
     }
   },
   "decisions": [
-    "Both pages are approved",
-    "Use supplied wordmark and cube logo",
-    "Use real supplied dashboard screenshots",
-    "Centered navy hero with layered dashboard imagery",
-    "Homepage retains concise seven-section content flow",
-    "Elections retains voter communication and audience sections from full source body",
-    "Separate Core Platform and Elections pricing entry points",
-    "Local preview only; no hosted publication requested",
-    "Approved refresh: real category photography with colored card bodies",
-    "Use supporting teal and amber while navy and blue remain dominant",
-    "Strengthen section contrast on both pages",
-    "Use actual registration, permissions and executive record crops for benefits",
-    "Targeted Elections polish: separate responsive workflow cards, Untitled UI featured-icon and card patterns adapted to existing static site, evenly inset participation frame, native-resolution screenshots for expanded views",
-    "Public elections use a four-step vertical ordered process; custom-deployment pricing has a structured callout; footer links open separate review drafts; the monitor preview shows the complete native upload rather than the participation-only crop.",
-    "Match both voting models with a reusable numbered journey; add a factual cookie notice, settings dialog, preference reset, Cookie Policy page and inquiry privacy link. Only the first-party privacy-choice cookie is stored, after an explicit choice; no analytics or advertising service is enabled.",
-    "Approved pricing polish: small teal people-icon tile beside a bolder voter range; preserve the annual-price hierarchy. Add a faint, smaller cube watermark cropped into the homepage hero top-right corner, with a reduced mobile treatment and decorative-only semantics.",
-    "User requested a slightly larger homepage watermark: increase desktop to 330px, tablet to 240px, and phone to 175px; retain the faint treatment and corner crop.",
-    "Product screenshots stand alone with no added colored frame, browser toolbar, border or viewing-label strip. Reuse one screenshot button with slight hover zoom, visible keyboard focus and reduced-motion support across modules, heroes, benefits, monitor and composer. Preserve surrounding editorial cards and sections; decorative marks and audience photography stay still. Expanded views retain native uploaded PNGs."
+    "Use the supplied wordmark and S-block brand mark; preserve navy and blue as the main brand colors.",
+    "Use the real supplied dashboard screenshots. Native 3360px PNGs are used inline and in the full-screen viewer.",
+    "Use approved temporary Fraunces and Manrope until licensed Recoleta and Axiforma webfonts are supplied.",
+    "Body copy is 16px on desktop and 14px on mobile; headings are at least 18px; compact labels are 14px / 12px.",
+    "October 18 direction supersedes the earlier pastel-card and frameless-image treatments: audience photography sits beside white editorial copy with fine dividers, without colored card bodies or floating icon tiles.",
+    "Benefits are alternating product stories with focused screenshot views and concise captions; screenshots occupy most of each story width.",
+    "Product images use restrained window chrome, contextual labels, native-resolution CSS crops, a full-screen affordance, visible focus, subtle pointer hover and reduced-motion support. Crops clarify the feature; the full original is always available.",
+    "Election setup is a numbered sequence. Communication features form a divided list beside the actual composer. Voting modes form a two-column comparison. Avoid repeated rainbow icon tiles and rounded pastel shells.",
+    "The election monitor shows overview, voter reminder, turnout and all participation bars; do not crop away charts.",
+    "Keep the existing copy, module-tab behavior, pricing, inquiry flows, legal drafts and cookie settings working.",
+    "Core Platform and Elections retain separate pricing entry points. Contact admin@strukthq.com.",
+    "Local preview only. No publication or push is authorized for this design pass.",
+    "Add an own-product workflow hub before the homepage module tabs. Eight actual service areas connect to the supplied full-color S-block (the transparent favicon asset), never the faded hero watermark. Thin directional connectors and restrained movement respect reduced motion.",
+    "Screenshot frames use a slim neutral macOS-style title bar, red/yellow/green decorative window controls, a fine gray border and small full-screen icon. Shared styling applies to both pages.",
+    "Replace the visible organization name list with the seven supplied full-color customer organization logos; keep them unboxed and evenly spaced in one desktop row, then center them into readable rows on narrow screens.",
+    "Use the supplied 1920×1038 COMPSSA live election monitor in the Elections hero and participation image, with full-frame fit and the original PNG available in the image viewer."
   ],
-  "21st": "CLI available; search attempted but account is not signed in",
+  "21st": "Search attempted on October 18; CLI is installed but not authenticated. Implemented using the existing static HTML/CSS and researched references, without adding dependencies.",
   "contactEmail": "admin@strukthq.com"
 }

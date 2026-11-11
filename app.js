@@ -47,12 +47,15 @@
     });
   });
 
-  const inquiryDialog = $('#inquiry-dialog');
-  const inquiryForm = $('#inquiry-form');
-  const review = $('#inquiry-review');
-  const status = $('#inquiry-status');
-  const contactEmail = window.STRUKTHQ_CONFIG?.contactEmail || '';
-  let inquiry = { subject: '', body: '' };
+  const contactDialog = $('#contact-dialog');
+  const whatsappLink = $('#whatsapp-chat-link');
+  const whatsappNumber = $('#whatsapp-number');
+  const whatsappContext = $('#whatsapp-context');
+  const whatsappStatus = $('#whatsapp-status');
+  const copyWhatsAppNumber = $('#copy-whatsapp-number');
+  const configuredWhatsAppNumber = window.STRUKTHQ_CONFIG?.contactWhatsAppNumber || '';
+  const whatsappDigits = configuredWhatsAppNumber.replace(/\D/g, '');
+  const whatsappDisplay = window.STRUKTHQ_CONFIG?.contactWhatsAppDisplay || configuredWhatsAppNumber;
   let opener = null;
   const showDialog = (dialog, source) => {
     opener = source || document.activeElement;
@@ -71,54 +74,24 @@
     });
   });
   $$('[data-close-dialog]').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
-  const openInquiry = (plan = 'Core Platform', message = '', source) => {
-    inquiryForm.hidden = false;
-    review.hidden = true;
-    inquiryForm.elements.plan.value = plan;
-    inquiryForm.elements.message.value = message;
-    status.textContent = '';
+  const openContact = (topic = 'Core Platform', note = '', source) => {
+    const interest = topic === 'General inquiry' ? 'your question' : topic;
+    whatsappNumber.textContent = whatsappDisplay;
+    whatsappLink.href = 'https://wa.me/' + whatsappDigits;
+    whatsappLink.setAttribute('aria-label', 'Open WhatsApp chat with StruktHQ at ' + whatsappDisplay);
+    whatsappContext.textContent = note ? 'You can mention: ' + note : 'Tell us what you need for ' + interest + '.';
+    whatsappStatus.textContent = 'Nothing is sent until you write and send your message in WhatsApp.';
     closeMenu();
-    showDialog(inquiryDialog, source);
+    showDialog(contactDialog, source);
   };
-  $$('[data-inquiry]').forEach(button => button.addEventListener('click', () => openInquiry(button.dataset.inquiry, button.dataset.inquiryMessage || '', button)));
-  inquiryForm.addEventListener('submit', event => {
-    event.preventDefault();
-    if (!inquiryForm.reportValidity()) return;
-    const data = new FormData(inquiryForm);
-    const value = key => String(data.get(key) || '').trim();
-    inquiry = {
-      subject: `StruktHQ ${value('plan')} inquiry — ${value('organization')}`,
-      body: `Hello StruktHQ,\n\nI’d like to learn more about ${value('plan')}.\n\nName: ${value('name')}\nEmail: ${value('email')}\nOrganization: ${value('organization')}\nOrganization size: ${value('size') || 'Not specified'}\nInterested in: ${value('plan')}\n\n${value('message') || 'Please let me know the next steps to get started.'}\n\nThank you,\n${value('name')}`
-    };
-    $('#inquiry-text').textContent = inquiry.body;
-    inquiryForm.hidden = true;
-    review.hidden = false;
-    $('#email-inquiry').disabled = !contactEmail;
-    status.textContent = contactEmail ? `Your email app will open a draft addressed to ${contactEmail}. Review it and send when you’re ready.` : 'Copy your inquiry to share it with StruktHQ.';
-    $('#email-inquiry').focus();
-  });
-  $('#email-inquiry').addEventListener('click', () => {
-    if (!contactEmail) return;
-    window.location.href = `mailto:${encodeURIComponent(contactEmail)}?subject=${encodeURIComponent(inquiry.subject)}&body=${encodeURIComponent(inquiry.body)}`;
-    status.textContent = 'Your inquiry is ready in your email app. Send it there to contact StruktHQ.';
-  });
-  $('#copy-inquiry').addEventListener('click', async () => {
+  $$('[data-inquiry]').forEach(button => button.addEventListener('click', () => openContact(button.dataset.inquiry, button.dataset.inquiryMessage || '', button)));
+  copyWhatsAppNumber.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(`To: ${contactEmail}\nSubject: ${inquiry.subject}\n\n${inquiry.body}`);
-      status.textContent = 'Inquiry copied. You can paste it into your email app.';
+      await navigator.clipboard.writeText(whatsappDisplay);
+      whatsappStatus.textContent = 'WhatsApp number copied. Open WhatsApp and start a chat with StruktHQ.';
     } catch {
-      const selection = window.getSelection();
-      const range = document.createRange();
-      range.selectNodeContents($('#inquiry-text'));
-      selection.removeAllRanges();
-      selection.addRange(range);
-      status.textContent = 'Select and copy the inquiry above, then paste it into your email app.';
+      whatsappStatus.textContent = 'Copy this WhatsApp number: ' + whatsappDisplay;
     }
-  });
-  $('#edit-inquiry').addEventListener('click', () => {
-    inquiryForm.hidden = false;
-    review.hidden = true;
-    inquiryForm.elements.name.focus();
   });
 
   const imageDialog = $('#image-dialog');
