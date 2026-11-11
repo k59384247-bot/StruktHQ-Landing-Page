@@ -106,28 +106,85 @@
   imageDialog.addEventListener('close', () => image.removeAttribute('src'));
 
   const cookieName = 'strukthq_cookie_choice';
-  const cookieValue = 'essential-only-v1';
+  const essentialChoice = 'essential-only-v1';
+  const analyticsChoice = 'analytics-allowed-v1';
   const cookieMaxAge = 180 * 24 * 60 * 60;
+  const measurementId = window.STRUKTHQ_CONFIG?.googleAnalyticsId || '';
   const cookieBanner = $('#cookie-banner');
   const cookieDialog = $('#cookie-dialog');
   const cookieStatus = $('#cookie-status');
+  const analyticsBadge = $('#analytics-status-badge');
   const clearCookieChoice = $('#clear-cookie-choice');
-  const hasCookieChoice = () => {
+  const readCookieChoice = () => {
     try {
-      return document.cookie.split(';').some(part => part.trim() === `${cookieName}=${cookieValue}`);
+      const entry = document.cookie.split(';').map(part => part.trim()).find(part => part.startsWith(cookieName + '='));
+      const value = entry?.slice(cookieName.length + 1) || '';
+      return value === essentialChoice || value === analyticsChoice ? value : '';
     } catch {
-      return false;
+      return '';
     }
   };
-  const updateCookieStatus = () => {
-    const saved = hasCookieChoice();
-    cookieStatus.textContent = saved
-      ? 'Your essential-only choice is saved in this browser.'
-      : 'Your choice has not been saved in this browser yet.';
-    clearCookieChoice.disabled = !saved;
-    return saved;
+  let currentChoice = readCookieChoice();
+  let analyticsLoaded = false;
+  const googleConsent = analytics_storage => ({
+    analytics_storage,
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  const loadAnalytics = () => {
+    if (!measurementId) return;
+    window['ga-disable-' + measurementId] = false;
+    if (analyticsLoaded) {
+      window.gtag('consent', 'update', googleConsent('granted'));
+      window.gtag('event', 'page_view', { page_location: window.location.href, page_title: document.title });
+      return;
+    }
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('consent', 'default', googleConsent('denied'));
+    window.gtag('consent', 'update', googleConsent('granted'));
+    window.gtag('js', new Date());
+    window.gtag('config', measurementId, { allow_google_signals: false, allow_ad_personalization_signals: false });
+    const tag = document.createElement('script');
+    tag.async = true;
+    tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+    document.head.appendChild(tag);
+    analyticsLoaded = true;
   };
-  cookieBanner.hidden = updateCookieStatus();
+  const clearAnalyticsCookies = () => {
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+    const domains = ['', '; Domain=' + hostname, '; Domain=.' + hostname];
+    if (parts.length > 2) domains.push('; Domain=.' + parts.slice(-2).join('.'));
+    const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie.split(';').map(part => part.trim().split('=')[0]).filter(name => name === '_ga' || name.startsWith('_ga_')).forEach(name => {
+      domains.forEach(domain => {
+        document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax' + secure + domain;
+      });
+    });
+  };
+  const disableAnalytics = () => {
+    if (measurementId) window['ga-disable-' + measurementId] = true;
+    if (typeof window.gtag === 'function') window.gtag('consent', 'update', googleConsent('denied'));
+    clearAnalyticsCookies();
+  };
+  const updateCookieStatus = () => {
+    const savedChoice = readCookieChoice();
+    const choice = currentChoice || savedChoice;
+    cookieStatus.textContent = choice === analyticsChoice
+      ? 'Analytics is enabled based on your choice.'
+      : choice === essentialChoice
+        ? 'Your essential-only choice is saved in this browser.'
+        : 'No choice has been saved. Analytics is off.';
+    analyticsBadge.textContent = choice === analyticsChoice ? 'On' : 'Off';
+    analyticsBadge.classList.toggle('inactive', choice !== analyticsChoice);
+    clearCookieChoice.disabled = !savedChoice;
+    return Boolean(savedChoice);
+  };
+  cookieBanner.hidden = Boolean(currentChoice);
+  updateCookieStatus();
+  if (currentChoice === analyticsChoice) loadAnalytics();
   $('#dismiss-cookie-notice').addEventListener('click', () => {
     cookieBanner.hidden = true;
     $('.nav-button')?.focus({ preventScroll: true });
@@ -136,34 +193,42 @@
     updateCookieStatus();
     showDialog(cookieDialog, button);
   }));
-  $$('[data-save-cookies]').forEach(button => button.addEventListener('click', () => {
+  const saveCookieChoice = (choice, button) => {
+    currentChoice = choice;
+    if (choice === analyticsChoice) loadAnalytics();
+    else disableAnalytics();
     try {
       const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-      document.cookie = `${cookieName}=${cookieValue}; Max-Age=${cookieMaxAge}; Path=/; SameSite=Lax${secure}`;
+      document.cookie = cookieName + '=' + choice + '; Max-Age=' + cookieMaxAge + '; Path=/; SameSite=Lax' + secure;
     } catch {
-      // The current visit still works when a browser blocks cookie storage.
+      // The selected setting still applies for this visit when cookie storage is blocked.
     }
     cookieBanner.hidden = true;
     const saved = updateCookieStatus();
+    if (!saved) cookieStatus.textContent = choice === analyticsChoice
+      ? 'Analytics is enabled for this visit, but your browser could not save the choice.'
+      : 'Essential-only applies for this visit, but your browser could not save the choice.';
     if (saved && cookieDialog.open) cookieDialog.close();
     else if (saved && button.closest('#cookie-banner')) $('.nav-button')?.focus({ preventScroll: true });
-    if (!saved) {
-      cookieStatus.textContent = 'Your browser could not save this choice. The site still works with essential cookies only.';
-      if (!cookieDialog.open) showDialog(cookieDialog, button);
-    }
-  }));
+    else if (!cookieDialog.open) showDialog(cookieDialog, button);
+  };
+  $$('[data-save-cookies]').forEach(button => button.addEventListener('click', () => saveCookieChoice(essentialChoice, button)));
+  $$('[data-allow-analytics]').forEach(button => button.addEventListener('click', () => saveCookieChoice(analyticsChoice, button)));
   clearCookieChoice.addEventListener('click', () => {
+    disableAnalytics();
+    currentChoice = '';
     try {
       const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-      document.cookie = `${cookieName}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;
+      document.cookie = cookieName + '=; Max-Age=0; Path=/; SameSite=Lax' + secure;
     } catch {
       // Report the resulting state rather than assuming storage succeeded.
     }
-    if (updateCookieStatus()) {
+    if (readCookieChoice()) {
       cookieStatus.textContent = 'This browser could not clear the choice. You can also remove it through your browser settings.';
       return;
     }
     cookieBanner.hidden = false;
+    updateCookieStatus();
     cookieDialog.close();
   });
   cookieDialog.addEventListener('close', () => {
