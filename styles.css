@@ -1046,6 +1046,10 @@ body .wordmark { width: 140px; }
 .whatsapp-steps p span { display: grid; place-items: center; flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; color: #147a55; background: #e7f3ed; font-size: 10px; font-weight: 700; }
 .whatsapp-chat-link { justify-content: center; text-decoration: none; }
 .whatsapp-status { margin-bottom: 0; }
+.cookie-dialog .cookie-category-badge { gap: 7px; padding: 0; border-radius: 0; background: transparent; color: var(--slate); font-weight: 500; }
+.cookie-dialog .cookie-category-badge::before { content: ""; width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: var(--teal); }
+.cookie-dialog .cookie-category-badge.inactive { background: transparent; color: var(--slate); }
+.cookie-dialog .cookie-category-badge.inactive::before { background: #aab5c0; }
 @media (max-width: 600px) {
   .whatsapp-contact-card { gap: 10px; padding: 12px; }
   .whatsapp-contact-icon { flex-basis: 38px; width: 38px; height: 38px; }
