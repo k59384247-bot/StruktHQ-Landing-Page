@@ -10,7 +10,8 @@ for (const page of pages) {
   for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
     const url = match[1];
     if (!url.startsWith('/') && !url.startsWith('#')) continue;
-    const [pathname, fragment] = url.split('#');
+    const [resource, fragment] = url.split('#');
+    const pathname = resource.split('?')[0];
     const target = pathname ? path.join(root, pathname) : path.join(root, page);
     const actual = (await stat(target)).isDirectory() ? path.join(target, 'index.html') : target;
     if (fragment) {
