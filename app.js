@@ -110,6 +110,7 @@
   const analyticsChoice = 'analytics-allowed-v1';
   const cookieMaxAge = 180 * 24 * 60 * 60;
   const measurementId = window.STRUKTHQ_CONFIG?.googleAnalyticsId || '';
+  const containerId = window.STRUKTHQ_CONFIG?.googleTagManagerId || '';
   const cookieBanner = $('#cookie-banner');
   const cookieDialog = $('#cookie-dialog');
   const cookieStatus = $('#cookie-status');
@@ -133,7 +134,7 @@
     ad_personalization: 'denied'
   });
   const loadAnalytics = () => {
-    if (!measurementId) return;
+    if (!containerId) return;
     window['ga-disable-' + measurementId] = false;
     if (analyticsLoaded) {
       window.gtag('consent', 'update', googleConsent('granted'));
@@ -145,10 +146,10 @@
     window.gtag('consent', 'default', googleConsent('denied'));
     window.gtag('consent', 'update', googleConsent('granted'));
     window.gtag('js', new Date());
-    window.gtag('config', measurementId, { allow_google_signals: false, allow_ad_personalization_signals: false });
+    window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
     const tag = document.createElement('script');
     tag.async = true;
-    tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+    tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(containerId);
     document.head.appendChild(tag);
     analyticsLoaded = true;
   };
