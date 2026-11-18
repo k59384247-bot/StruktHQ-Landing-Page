@@ -177,15 +177,15 @@
       ? 'Analytics is enabled based on your choice.'
       : choice === essentialChoice
         ? 'Your essential-only choice is saved in this browser.'
-        : 'No choice has been saved. Analytics is off.';
-    analyticsBadge.textContent = choice === analyticsChoice ? 'On' : 'Off';
-    analyticsBadge.classList.toggle('inactive', choice !== analyticsChoice);
+        : 'Analytics is on by default. You can turn it off below.';
+    analyticsBadge.textContent = choice === essentialChoice ? 'Off' : 'On';
+    analyticsBadge.classList.toggle('inactive', choice === essentialChoice);
     clearCookieChoice.disabled = !savedChoice;
     return Boolean(savedChoice);
   };
   cookieBanner.hidden = Boolean(currentChoice);
   updateCookieStatus();
-  if (currentChoice === analyticsChoice) loadAnalytics();
+  if (currentChoice !== essentialChoice) loadAnalytics();
   $('#dismiss-cookie-notice').addEventListener('click', () => {
     cookieBanner.hidden = true;
     $('.nav-button')?.focus({ preventScroll: true });
@@ -228,6 +228,7 @@
       cookieStatus.textContent = 'This browser could not clear the choice. You can also remove it through your browser settings.';
       return;
     }
+    loadAnalytics();
     cookieBanner.hidden = false;
     updateCookieStatus();
     cookieDialog.close();
