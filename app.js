@@ -114,7 +114,7 @@
   const cookieBanner = $('#cookie-banner');
   const cookieDialog = $('#cookie-dialog');
   const cookieStatus = $('#cookie-status');
-  const analyticsBadge = $('#analytics-status-badge');
+  const analyticsToggle = $('#analytics-toggle');
   const clearCookieChoice = $('#clear-cookie-choice');
   const readCookieChoice = () => {
     try {
@@ -174,12 +174,11 @@
     const savedChoice = readCookieChoice();
     const choice = currentChoice || savedChoice;
     cookieStatus.textContent = choice === analyticsChoice
-      ? 'Analytics is enabled based on your choice.'
+      ? 'Your preferences are saved.'
       : choice === essentialChoice
-        ? 'Your essential-only choice is saved in this browser.'
-        : 'Analytics is on by default. You can turn it off below.';
-    analyticsBadge.textContent = choice === essentialChoice ? 'Off' : 'On';
-    analyticsBadge.classList.toggle('inactive', choice === essentialChoice);
+        ? 'Your preferences are saved.'
+        : 'You can change your preferences anytime.';
+    analyticsToggle.checked = choice !== essentialChoice;
     clearCookieChoice.disabled = !savedChoice;
     return Boolean(savedChoice);
   };
@@ -209,12 +208,11 @@
     if (!saved) cookieStatus.textContent = choice === analyticsChoice
       ? 'Analytics is enabled for this visit, but your browser could not save the choice.'
       : 'Essential-only applies for this visit, but your browser could not save the choice.';
-    if (saved && cookieDialog.open) cookieDialog.close();
+    if (saved && cookieDialog.open && button !== analyticsToggle) cookieDialog.close();
     else if (saved && button.closest('#cookie-banner')) $('.nav-button')?.focus({ preventScroll: true });
     else if (!cookieDialog.open) showDialog(cookieDialog, button);
   };
-  $$('[data-save-cookies]').forEach(button => button.addEventListener('click', () => saveCookieChoice(essentialChoice, button)));
-  $$('[data-allow-analytics]').forEach(button => button.addEventListener('click', () => saveCookieChoice(analyticsChoice, button)));
+  analyticsToggle.addEventListener('change', () => saveCookieChoice(analyticsToggle.checked ? analyticsChoice : essentialChoice, analyticsToggle));
   clearCookieChoice.addEventListener('click', () => {
     disableAnalytics();
     currentChoice = '';
